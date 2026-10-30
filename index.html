@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Douglas Warner II | Mission Control Executive AI Portfolio</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Orbitron (Display), Fira Code (Telemetry/Mono), Inter (Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+            display: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            telemetry: {
+              bg: '#050811',
+              card: '#0a0f1d',
+              surface: '#0f172a',
+              border: '#1e293b',
+              cyan: '#06b6d4',
+              neon: '#38bdf8',
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              violet: '#8b5cf6',
+              rose: '#f43f5e',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'ping-slow': 'ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Mission Control Canvas Background */
+    body {
+      background-color: #050811;
+      color: #e2e8f0;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.14), transparent 40%),
+        radial-gradient(circle at 15% 45%, rgba(139, 92, 246, 0.08), transparent 35%),
+        radial-gradient(circle at 85% 65%, rgba(16, 185, 129, 0.08), transparent 35%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      scroll-behavior: smooth;
+    }
+
+    /* HUD Corner Framing Utility */
+    .hud-box {
+      position: relative;
+      background: rgba(10, 15, 29, 0.82);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(12px);
+    }
+    .hud-box::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 10px; height: 10px;
+      border-top: 2px solid #38bdf8;
+      border-left: 2px solid #38bdf8;
+      pointer-events: none;
+    }
+    .hud-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 10px; height: 10px;
+      border-bottom: 2px solid #38bdf8;
+      border-right: 2px solid #38bdf8;
+      pointer-events: none;
+    }
+
+    /* Scanline Ambient Layer */
+    .scanlines {
+      pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
+      background-size: 100% 4px;
+      z-index: 999;
+      opacity: 0.35;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050811;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased text-slate-200 selection:bg-cyan-500 selection:text-black">
+
+  <!-- Ambient CRT Scanlines -->
+  <div class="scanlines"></div>
+
+  <!-- HUD NAVIGATION HEADER -->
+  <header class="sticky top-0 z-50 bg-[#050811]/90 backdrop-blur-md border-b border-cyan-500/20 px-3 sm:px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+      
+      <!-- Live Status & Call-Sign Indicator -->
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-400 font-semibold tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          SYS.ONLINE // 2026 ACTIVE
+        </span>
+        <span class="hidden md:inline text-slate-600">|</span>
+        <span class="hidden md:inline text-cyan-300 font-bold tracking-widest">
+          CALLSIGN: <span class="text-white">MICHAEL THE BEARD</span>
+        </span>
+      </div>
+
+      <!-- Navigation Anchors -->
+      <nav class="hidden lg:flex items-center space-x-5 text-slate-400 tracking-wider">
+        <a href="#hero" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-crosshairs text-[10px] text-cyan-500"></i> TELEMETRY
+        </a>
+        <a href="#ai-terminal" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-terminal text-[10px] text-cyan-500"></i> AI DOSSIER
+        </a>
+        <a href="#acuity-engine" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-calculator text-[10px] text-cyan-500"></i> dvLED CALCULATOR
+        </a>
+        <a href="#flight-path" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-route text-[10px] text-cyan-500"></i> FLIGHT PATH
+        </a>
+        <a href="#alliance-matrix" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-network-wired text-[10px] text-cyan-500"></i> ALLIANCES
+        </a>
+      </nav>
+
+      <!-- Action & Sound Controls -->
+      <div class="flex items-center space-x-2.5 ml-auto">
+        <!-- Sound Synthesis Toggle -->
+        <button id="soundToggle" onclick="toggleAudio()" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-300 transition-all flex items-center gap-1.5" title="Toggle cybernetic synthesized audio feedback">
+          <i id="soundIcon" class="fa-solid fa-volume-high text-cyan-400 text-xs"></i>
+          <span id="soundLabel" class="text-[11px] font-semibold">AUDIO ON</span>
+        </button>
+
+        <!-- Direct LinkedIn Gateway -->
+        <a href="https://www.linkedin.com/in/michaelthebeard/" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded bg-cyan-950/70 border border-cyan-500/50 hover:bg-cyan-500 hover:text-black text-cyan-300 font-bold tracking-wider transition-all flex items-center gap-1.5">
+          <i class="fa-brands fa-linkedin text-sm"></i>
+          <span class="text-[11px]">LINKEDIN</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN TELEMETRY CONTENT WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-10">
+
+    <!-- HERO SECTION & EXECUTIVE VALUE BRIEFING -->
+    <section id="hero" class="hud-box rounded-xl p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+      <!-- Background Ambient Glow Points -->
+      <div class="absolute -right-24 -top-24 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+        
+        <!-- Left: Identity, Credentials & Actions -->
+        <div class="lg:col-span-8 space-y-4">
+          
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono tracking-widest uppercase">
+              <i class="fa-solid fa-microchip mr-1"></i> B2B SOLUTIONS ARCHITECTURE
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono tracking-wider">
+              <i class="fa-solid fa-shield-halved mr-1"></i> MISSION CRITICAL C2
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono tracking-wider">
+              <i class="fa-solid fa-bolt mr-1"></i> ALLIANCE STRATEGY
+            </span>
+          </div>
+
+          <div>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-none">
+              MICHAEL DOUGLAS WARNER II
+            </h1>
+            <div class="mt-2 text-sm sm:text-base font-mono text-cyan-400 flex items-center gap-2">
+              <span class="text-slate-400 font-light">OPERATIONAL CODENAME:</span> 
+              <span class="font-bold text-white bg-slate-900 px-2 py-0.5 rounded border border-cyan-500/30 tracking-widest">"MICHAEL THE BEARD"</span>
+            </div>
+          </div>
+
+          <p class="text-slate-300 text-sm sm:text-base font-mono leading-relaxed max-w-3xl">
+            Enterprise Sales Engineer & Strategic Alliance Leader orchestrating commercial AV ecosystems, multi-vendor GTM frameworks, and direct-view LED (dvLED) physical architectures. Known for closing the divide between optical engineering rigor, C-suite business cases, and scalable partner co-marketing programs.
+          </p>
+
+          <!-- Core Telemetry Metric Blocks -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono">
+            <div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
+              <div class="text-slate-400 text-[11px]">FIELD ARCHITECTURE</div>
+              <div class="text-xl font-bold text-cyan-400 font-display">15+ YRS</div>
+              <div class="text-[10px] text-slate-500">Commercial AV & dvLED</div>
+            </div>
+            <div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
+              <div class="text-slate-400 text-[11px]">DEPLOYMENTS</div>
+              <div class="text-xl font-bold text-emerald-400 font-display">400+</div>
+              <div class="text-[10px] text-slate-500">Control & C2 Venues</div>
+            </div>
+            <div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
+              <div class="text-slate-400 text-[11px]">FLAGSHIP LAB</div>
+              <div class="text-xl font-bold text-amber-400 font-display">BREA, CA</div>
+              <div class="text-[10px] text-slate-500">Alliance Fusion Center</div>
+            </div>
+            <div class="p-3 bg-slate-950/70 rounded-lg border border-slate-800">
+              <div class="text-slate-400 text-[11px]">COMMUNITY SEAT</div>
+              <div class="text-xl font-bold text-violet-400 font-display">VP / FOUNDER</div>
+              <div class="text-[10px] text-slate-500">AROC NEVALFA & SinCity</div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="flex flex-wrap gap-3 pt-3">
+            <button onclick="scrollToSection('ai-terminal')" class="px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold font-mono text-xs tracking-wider transition-all transform active:scale-95 flex items-center gap-2 shadow-lg shadow-cyan-500/20">
+              <i class="fa-solid fa-terminal"></i>
+              <span>QUERY MICHAEL AI AGENT</span>
+            </button>
+            <button onclick="scrollToSection('acuity-engine')" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 font-mono text-xs tracking-wider transition-all flex items-center gap-2">
+              <i class="fa-solid fa-calculator"></i>
+              <span>dvLED ACUITY ENGINE</span>
+            </button>
+            <button onclick="scrollToSection('alliance-matrix')" class="px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-mono text-xs tracking-wider transition-all flex items-center gap-2">
+              <i class="fa-solid fa-network-wired text-emerald-400"></i>
+              <span>ALLIANCE MATRIX</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right: Holographic Identity HUD Badge -->
+        <div class="lg:col-span-4 flex flex-col items-center justify-center">
+          <div class="relative w-64 sm:w-72 rounded-2xl bg-gradient-to-b from-cyan-950/40 via-slate-950 to-slate-950/90 border border-cyan-500/40 p-5 text-center shadow-2xl backdrop-blur-md">
+            
+            <!-- Corner HUD Decals -->
+            <div class="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
+            <div class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-cyan-400"></div>
+            <div class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-cyan-400"></div>
+            <div class="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
+
+            <!-- Avatar Hologram -->
+            <div class="relative mx-auto w-24 h-24 rounded-full bg-slate-900 border-2 border-cyan-400 p-1 flex items-center justify-center mb-3">
+              <div class="w-full h-full rounded-full bg-cyan-950/80 flex items-center justify-center text-cyan-300 text-3xl">
+                <i class="fa-solid fa-user-gear"></i>
+              </div>
+              <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-950 flex items-center justify-center text-[10px] text-black font-bold">
+                ✓
+              </div>
+            </div>
+
+            <div class="text-xs font-mono font-bold text-white tracking-widest">WARNER // MDW-II</div>
+            <div class="text-[11px] text-cyan-400 font-mono">SENIOR SALES ENGINEER (B2B ID)</div>
+            <div class="text-[10px] text-slate-500 font-mono mt-0.5">LAS VEGAS METRO / REGIONAL GTM</div>
+
+            <!-- Telemetry System Diagnostics -->
+            <div class="w-full mt-4 space-y-1.5 font-mono text-[11px]">
+              <div class="flex justify-between p-2 rounded bg-slate-900/90 border border-slate-800">
+                <span class="text-slate-400">ECOSYSTEM GTM:</span>
+                <span class="text-emerald-400 font-bold">ACTIVE & EXPANDING</span>
+              </div>
+              <div class="flex justify-between p-2 rounded bg-slate-900/90 border border-slate-800">
+                <span class="text-slate-400">SALESFORCE SLA:</span>
+                <span class="text-cyan-300 font-bold">&lt; 24H TECH CADENCE</span>
+              </div>
+              <div class="flex justify-between p-2 rounded bg-slate-900/90 border border-slate-800">
+                <span class="text-slate-400">PROTOCOL STACK:</span>
+                <span class="text-amber-300 font-bold">ST2110 / SDVoE / KVM</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-around text-xs font-mono text-slate-400">
+              <a href="https://www.linkedin.com/in/michaelthebeard/" target="_blank" class="hover:text-cyan-400 transition-colors">
+                <i class="fa-brands fa-linkedin text-base"></i>
+              </a>
+              <a href="#flight-path" class="hover:text-cyan-400 transition-colors">
+                <i class="fa-solid fa-building-columns text-base"></i>
+              </a>
+              <button onclick="downloadBriefing()" class="hover:text-cyan-400 transition-colors" title="Download Executive Briefing">
+                <i class="fa-solid fa-file-arrow-down text-base"></i>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: INTERACTIVE AI DOSSIER TERMINAL -->
+    <section id="ai-terminal" class="hud-box rounded-xl overflow-hidden shadow-2xl">
+      
+      <!-- Terminal Bar Header -->
+      <div class="bg-slate-950/95 px-4 sm:px-6 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 font-mono">
+        <div class="flex items-center space-x-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+          <span class="text-xs text-slate-300 ml-2 font-bold tracking-wider">MICHAEL_AI // STRATEGIC DOSSIER TERMINAL [v3.0]</span>
+        </div>
+        <div class="text-[11px] text-cyan-400 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+          <span>GROUNDED ON B2B SALES ENGINEERING & ALLIANCE DATA</span>
+        </div>
+      </div>
+
+      <!-- Terminal Workspace -->
+      <div class="p-4 sm:p-6 space-y-4">
+        
+        <!-- Fast Query Chips -->
+        <div class="space-y-1.5">
+          <div class="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-bolt text-amber-400"></i>
+            <span>Select Telemetry Fast-Query:</span>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs font-mono">
+            <button onclick="sendQuickPrompt('Tell me about the Alliance Fusion Center in Brea, CA')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              🏛️ Alliance Fusion Center
+            </button>
+            <button onclick="sendQuickPrompt('Explain the dvLED Viewing Distance and Visual Acuity Formula')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              📐 dvLED Acuity Formula (8x & 10x)
+            </button>
+            <button onclick="sendQuickPrompt('Describe Michael\'s Salesforce Deal Velocity & Sales Engineering Cadence')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              💼 Salesforce Cadence & Deal Velocity
+            </button>
+            <button onclick="sendQuickPrompt('Summarize career flight path from Lennar and AVI-SPL to LG')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              🚀 Career Flight Path (Lennar ➔ LG)
+            </button>
+            <button onclick="sendQuickPrompt('How do you approach seller enablement and LG Academy training?')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              🎓 Enablement & "Solutioning with Insight"
+            </button>
+            <button onclick="sendQuickPrompt('Tell me about SinCity Alfas and AROC NEVALFA leadership')" class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 hover:text-cyan-300 transition-all text-slate-300">
+              🏎️ SinCity Alfas & Community Leadership
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Log Window -->
+        <div id="chatHistory" class="bg-[#040711] border border-slate-800 rounded-lg p-4 h-80 sm:h-96 overflow-y-auto space-y-4 font-mono text-xs sm:text-sm">
+          
+          <!-- System Welcome Message -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-bold shrink-0">
+              AI
+            </div>
+            <div class="space-y-1">
+              <div class="text-[11px] text-cyan-400 font-semibold tracking-wider">MICHAEL_AGENT // SYSTEM INITIALIZED</div>
+              <div class="text-slate-300 bg-slate-900/60 p-3.5 rounded-lg border border-slate-800 leading-relaxed">
+                Welcome to Michael Douglas Warner II's AI Executive Dossier. I am calibrated with his direct-view LED (dvLED) engineering methodologies, strategic alliance co-marketing architectures, sales engineering pipeline mechanics, and enterprise background across LG Electronics USA, Lennar Corporation, and premier integration houses. Tap a prompt chip above or submit your specific inquiry.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Terminal Input Prompt -->
+        <form id="chatForm" onsubmit="handleUserInput(event)" class="relative flex items-center gap-2">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-cyan-500 font-mono text-xs">
+              $&gt;
+            </span>
+            <input 
+              id="chatInput"
+              type="text" 
+              autocomplete="off"
+              placeholder="Query Michael's background, dvLED math, Alliance Fusion Center, or deal velocity..."
+              class="w-full bg-[#080d1a] border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-lg pl-9 pr-4 py-2.5 text-xs sm:text-sm font-mono text-slate-100 placeholder-slate-500 outline-none transition-all"
+            >
+          </div>
+          <button 
+            type="submit" 
+            class="px-5 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold font-mono text-xs tracking-wider transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <span>QUERY</span>
+            <i class="fa-solid fa-arrow-turn-down fa-rotate-90"></i>
+          </button>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- SECTION: INTERACTIVE dvLED PIXEL PITCH & VISUAL ACUITY ENGINE -->
+    <section id="acuity-engine" class="hud-box rounded-xl p-6 sm:p-8 space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest">TECHNICAL SPECIFICATION ENGINE</div>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">dvLED Pixel Pitch & Visual Acuity Simulator</h2>
+          <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl font-mono">
+            Interactive calculation utility implementing Michael's 8x Minimum Threshold and 10x Optimal Retina Acuity rules for commercial command rooms and executive displays.
+          </p>
+        </div>
+        <div class="px-3 py-1.5 bg-cyan-950/60 border border-cyan-500/40 rounded text-cyan-300 font-mono text-xs">
+          OPTICAL FORMULA: Distance (ft) = Pitch (mm) × Multiplier
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        
+        <!-- Controls & Parameter Sliders -->
+        <div class="lg:col-span-5 space-y-5 bg-slate-950/70 p-5 rounded-lg border border-slate-800">
+          
+          <div>
+            <div class="flex justify-between text-xs font-mono text-slate-300 mb-1.5">
+              <span>Pixel Pitch Selection (P):</span>
+              <span id="pitchDisplay" class="text-cyan-400 font-bold text-sm">1.25 mm</span>
+            </div>
+            <input 
+              type="range" 
+              id="pitchRange" 
+              min="0.7" 
+              max="3.9" 
+              step="0.05" 
+              value="1.25" 
+              oninput="updateDvLEDCalc()"
+              class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+            >
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>0.7mm (MicroLED C2)</span>
+              <span>1.5mm (Corporate)</span>
+              <span>3.9mm (High-Bright)</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-mono text-slate-300 mb-1.5">
+              <span>Viewer Distance from Display:</span>
+              <span id="distDisplay" class="text-emerald-400 font-bold text-sm">15 Feet</span>
+            </div>
+            <input 
+              type="range" 
+              id="distRange" 
+              min="4" 
+              max="50" 
+              step="1" 
+              value="15" 
+              oninput="updateDvLEDCalc()"
+              class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+            >
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>4 ft (Operator Desk)</span>
+              <span>18 ft (Boardroom)</span>
+              <span>50 ft (Auditorium)</span>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800/80 grid grid-cols-2 gap-3 text-xs font-mono">
+            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
+              <span class="text-slate-500 block text-[10px]">MIN. ACUITY (8x RULE)</span>
+              <span id="minAcuityVal" class="text-white font-bold text-base">10.0 ft</span>
+            </div>
+            <div class="bg-slate-900 p-2.5 rounded border border-slate-800">
+              <span class="text-slate-500 block text-[10px]">OPTIMAL RETINA (10x RULE)</span>
+              <span id="optAcuityVal" class="text-cyan-300 font-bold text-base">12.5 ft</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Visual Throw & Acuity Feedback Canvas -->
+        <div class="lg:col-span-7 bg-slate-950/90 rounded-lg border border-slate-800 p-6 flex flex-col justify-between min-h-[260px]">
+          
+          <div class="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+            <span><i class="fa-solid fa-eye text-cyan-400 mr-1.5"></i> SIMULATED SIGHTLINE TELEMETRY</span>
+            <span id="resolutionClassTag" class="text-emerald-400 font-bold">UHD / NATIVE PIXEL MAPPING READY</span>
+          </div>
+
+          <div class="py-6 flex items-center justify-around relative">
+            <!-- Simulated dvLED Display -->
+            <div class="text-center">
+              <div id="simulatedLedWall" class="w-24 h-32 sm:w-32 sm:h-40 mx-auto rounded border-2 border-cyan-400 bg-cyan-950/40 flex flex-col items-center justify-center transition-all duration-300 shadow-lg shadow-cyan-500/20">
+                <span id="wallPitchLabel" class="text-cyan-300 font-mono text-xs font-bold">P1.25</span>
+                <span class="text-[9px] text-slate-400 font-mono mt-1">dvLED CABINET</span>
+              </div>
+            </div>
+
+            <!-- Optical Line of Sight Distance -->
+            <div class="flex-1 px-4 flex flex-col items-center">
+              <div class="w-full border-t border-dashed border-cyan-500/60 relative my-2">
+                <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 bg-slate-950 text-[10px] font-mono text-cyan-400 font-bold">
+                  <span id="beamDistanceSpan">15 FT THROW</span>
+                </div>
+              </div>
+              <div id="verdictBadge" class="text-center px-3 py-1.5 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 font-mono text-xs">
+                Specification Optimized: Retina Blend Achieved
+              </div>
+            </div>
+
+            <!-- Observer / Viewer -->
+            <div class="text-center">
+              <div class="w-14 h-14 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 text-xl mx-auto shadow-md">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400 mt-2 block">C-SUITE / OPERATOR</span>
+            </div>
+          </div>
+
+          <div class="text-[11px] font-mono text-slate-500 text-center border-t border-slate-800/80 pt-2">
+            Engineering Rule: Human visual acuity averages 1 arcminute (1/60th of a degree). At 8x, individual diodes dissolve; at 10x, seamless retina continuity is guaranteed.
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: CAREER FLIGHT PATH / MISSION LOG -->
+    <section id="flight-path" class="hud-box rounded-xl p-6 sm:p-8 space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest">MISSION HISTORY</div>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Career Flight Path & Operational Milestones</h2>
+        </div>
+        <div class="text-xs font-mono text-slate-400">
+          FIELD SYSTEMS INTEGRATION ➔ ENTERPRISE OEM ALLIANCE ARCHITECTURE
+        </div>
+      </div>
+
+      <div class="relative border-l border-cyan-500/30 ml-3 sm:ml-6 space-y-8 py-2">
+        
+        <!-- Flight Log 1: LG Electronics USA -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-cyan-400 ring-4 ring-[#0a0f1d] group-hover:scale-125 transition-transform"></div>
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <span class="text-base font-bold text-white font-mono">LG Electronics USA — B2B Information Display</span>
+              <span class="text-xs text-cyan-400 font-mono px-2 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/30">CURRENT ROLE</span>
+            </div>
+            <div class="text-xs text-slate-400 font-mono font-medium">Senior B2B Solution Sales Engineer & Strategic Alliances Lead</div>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+              Driving North American enterprise sales engineering for flagship dvLED arrays (including LG MAGNIT MicroLED and high-acuity All-in-One bundles). Co-architect of the multi-vendor Alliance ecosystem and the Alliance Fusion Center in Brea, CA. Developer of national seller enablement series ("Solutioning with Insight") and curriculum for the LG Academy.
+            </p>
+            <div class="flex flex-wrap gap-2 pt-1 text-[11px] font-mono text-slate-400">
+              <span class="px-2 py-0.5 bg-slate-900 rounded border border-slate-800">MAGNIT MicroLED</span>
+              <span class="px-2 py-0.5 bg-slate-900 rounded border border-slate-800">Alliance Fusion Center</span>
+              <span class="px-2 py-0.5 bg-slate-900 rounded border border-slate-800">InfoComm Stage Demos</span>
+              <span class="px-2 py-0.5 bg-slate-900 rounded border border-slate-800">Salesforce Stage Velocity</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flight Log 2: Lennar Corporation -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-slate-600 ring-4 ring-[#0a0f1d] group-hover:bg-cyan-400 transition-colors"></div>
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <span class="text-base font-bold text-white font-mono">Lennar Corporation</span>
+              <span class="text-xs text-slate-400 font-mono">ENTERPRISE SCALE</span>
+            </div>
+            <div class="text-xs text-slate-400 font-mono font-medium">Senior AV Specialist & Enterprise Technologist</div>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+              Standardized corporate AV infrastructure across national divisional headquarters, executive briefing centers, and customer experience pavilions. Managed system integrators, established rigorous SLA frameworks, and oversaw multimillion-dollar technology modernization rollouts.
+            </p>
+          </div>
+        </div>
+
+        <!-- Flight Log 3: Integration Frontline (AVI-SPL & NTA) -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-slate-600 ring-4 ring-[#0a0f1d] group-hover:bg-cyan-400 transition-colors"></div>
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <span class="text-base font-bold text-white font-mono">AVI-SPL & National Technology Associates (NTA)</span>
+              <span class="text-xs text-slate-400 font-mono">FIELD ARCHITECTURE</span>
+            </div>
+            <div class="text-xs text-slate-400 font-mono font-medium">Lead AV Integration Systems Specialist & Field Commissioning</div>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+              Led field commissioning, control system programming, audio DSP tuning, and multi-display synchronization for major casino resorts, convention facilities, and high-security enterprise environments throughout the Las Vegas corridor.
+            </p>
+          </div>
+        </div>
+
+        <!-- Flight Log 4: Executive Community Leadership -->
+        <div class="relative pl-6 sm:pl-8 group">
+          <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-violet-400 ring-4 ring-[#0a0f1d]"></div>
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-baseline gap-2">
+              <span class="text-base font-bold text-white font-mono">AROC NEVALFA & SinCity Alfas</span>
+              <span class="text-xs text-violet-400 font-mono px-2 py-0.5 rounded bg-violet-950/70 border border-violet-500/30">COMMUNITY & BRAND LEADERSHIP</span>
+            </div>
+            <div class="text-xs text-slate-400 font-mono font-medium">Vice President (AROC NEVALFA) & Founder (SinCity Alfas)</div>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
+              Directing regional brand growth, event operations, corporate sponsorships, and charitable initiatives celebrating Italian automotive heritage across Nevada and California.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: STRATEGIC ALLIANCE ECOSYSTEM MATRIX -->
+    <section id="alliance-matrix" class="hud-box rounded-xl p-6 sm:p-8 space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="text-xs font-mono text-cyan-400 uppercase tracking-widest">MULTI-VENDOR SYNERGY</div>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display text-white">Strategic Alliance Ecosystem Matrix</h2>
+          <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-3xl font-mono">
+            Enterprise buyers require complete operational outcomes. Michael unites tier-1 hardware, processing, and ergonomic infrastructure into turnkey commercial architectures.
+          </p>
+        </div>
+        <div class="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-handshake"></i>
+          <span>TURNKEY B2B PACKAGING</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Alliance Partner 1: LG Electronics -->
+        <div class="bg-slate-950/80 p-5 rounded-lg border border-cyan-500/30 space-y-3">
+          <div class="flex justify-between items-center">
+            <div class="w-10 h-10 rounded bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+              <i class="fa-solid fa-tv text-lg"></i>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">DISPLAY ENGINE</span>
+          </div>
+          <h3 class="font-bold font-mono text-sm text-white">LG Business Solutions</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Market-leading commercial dvLED, MAGNIT MicroLED, All-in-One LED packages, and commercial OLED solutions engineered for 24/7 reliability.
+          </p>
+          <div class="text-[11px] font-mono text-cyan-400 pt-2 border-t border-slate-800">
+            • LG MAGNIT (0.78 - 1.25mm)<br>
+            • webOS Enterprise Signage<br>
+            • All-in-One 136" & 163"
+          </div>
+        </div>
+
+        <!-- Alliance Partner 2: Premier Mounts -->
+        <div class="bg-slate-950/80 p-5 rounded-lg border border-slate-800 hover:border-cyan-500/40 transition-colors space-y-3">
+          <div class="flex justify-between items-center">
+            <div class="w-10 h-10 rounded bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-300">
+              <i class="fa-solid fa-layer-group text-lg"></i>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">STRUCTURAL RIGGING</span>
+          </div>
+          <h3 class="font-bold font-mono text-sm text-white">Premier Mounts</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Precision structural mounting, ADA-compliant thin profiles, custom curved framing, and rapid serviceability brackets for seamless dvLED flatness.
+          </p>
+          <div class="text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800">
+            • Custom Extruded Frames<br>
+            • Z-Axis X-Y Precision Adjust<br>
+            • Seismic Safety Engineering
+          </div>
+        </div>
+
+        <!-- Alliance Partner 3: Datapath -->
+        <div class="bg-slate-950/80 p-5 rounded-lg border border-slate-800 hover:border-cyan-500/40 transition-colors space-y-3">
+          <div class="flex justify-between items-center">
+            <div class="w-10 h-10 rounded bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-300">
+              <i class="fa-solid fa-microchip text-lg"></i>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">PROCESSING & KVM</span>
+          </div>
+          <h3 class="font-bold font-mono text-sm text-white">Datapath</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Mission-critical video wall processors, multi-window canvas management, and ultra-low latency IP KVM distribution for C2 control centers.
+          </p>
+          <div class="text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800">
+            • VSN Processors & WallControl<br>
+            • Aetria Control Room Solution<br>
+            • Low Latency Signal Ingest
+          </div>
+        </div>
+
+        <!-- Alliance Partner 4: Evans Consoles -->
+        <div class="bg-slate-950/80 p-5 rounded-lg border border-slate-800 hover:border-cyan-500/40 transition-colors space-y-3">
+          <div class="flex justify-between items-center">
+            <div class="w-10 h-10 rounded bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-300">
+              <i class="fa-solid fa-chair text-lg"></i>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">INFRASTRUCTURE</span>
+          </div>
+          <h3 class="font-bold font-mono text-sm text-white">Evans Consoles</h3>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            Ergonomic mission-critical command workstations, thermal cable management, and architectural integration tailored to 24/7 operator environments.
+          </p>
+          <div class="text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800">
+            • Response & Strategy Consoles<br>
+            • Integrated Cable Routing<br>
+            • Operator Human Factors
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: EXECUTIVE CONTACT & DOSSIER EXPORT -->
+    <section class="hud-box rounded-xl p-6 sm:p-8 text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
+        <i class="fa-solid fa-satellite-dish"></i>
+        <span>DIRECT COMM LINK</span>
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-black font-display text-white">Initiate Executive Briefing</h2>
+      <p class="text-slate-400 text-xs sm:text-sm font-mono max-w-xl mx-auto">
+        Available for enterprise sales engineering leadership, strategic alliance GTM advisory, and commercial dvLED technical consultation.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-3 pt-2">
+        <a href="https://www.linkedin.com/in/michaelthebeard/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold font-mono text-xs tracking-wider transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/20">
+          <i class="fa-brands fa-linkedin text-sm"></i>
+          <span>CONNECT VIA LINKEDIN</span>
+        </a>
+        <button onclick="downloadBriefing()" class="px-6 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 font-mono text-xs tracking-wider transition-all flex items-center gap-2">
+          <i class="fa-solid fa-file-arrow-down text-sm"></i>
+          <span>EXPORT EXECUTIVE SUMMARY</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TELEMETRY FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-[#050811] px-4 py-8 mt-12 text-xs font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <div class="text-slate-300 font-bold">MICHAEL DOUGLAS WARNER II // EXECUTIVE MISSION PROFILE</div>
+        <div>Sales Engineering • dvLED Acuity Telemetry • Multi-Vendor Strategic Alliances</div>
+      </div>
+      <div class="flex items-center space-x-6 text-slate-400">
+        <a href="https://www.linkedin.com/in/michaelthebeard/" target="_blank" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-brands fa-linkedin text-base"></i>
+          <span>LinkedIn</span>
+        </a>
+        <button onclick="scrollToTop()" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-arrow-up"></i>
+          <span>Top</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC: AUDIO SYNTHESIZER, CALCULATOR, & AI KNOWLEDGE ENGINE -->
+  <script>
+    // 1. Cybernetic Web Audio Synthesizer
+    let audioActive = true;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playCyberBip(freq = 920, duration = 0.04) {
+      if (!audioActive) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + duration);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (err) {
+        // Safe fail
+      }
+    }
+
+    function toggleAudio() {
+      audioActive = !audioActive;
+      const icon = document.getElementById('soundIcon');
+      const label = document.getElementById('soundLabel');
+      if (audioActive) {
+        icon.className = 'fa-solid fa-volume-high text-cyan-400 text-xs';
+        label.innerText = 'AUDIO ON';
+        playCyberBip(1000, 0.05);
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark text-slate-500 text-xs';
+        label.innerText = 'AUDIO OFF';
+      }
+    }
+
+    // 2. Michael AI Dossier Knowledge Base
+    const dossierKnowledge = [
+      {
+        triggers: ['brea', 'fusion', 'alliance', 'partners', 'premier', 'datapath', 'evans', 'ecosystem'],
+        title: "The Alliance Fusion Center & Strategic Partner Ecosystem",
+        response: "Michael co-developed and launched the Alliance Fusion Center in Brea, CA. Rather than selling standalone LED panels, the center demonstrates an integrated ecosystem uniting LG dvLED visual displays, Premier Mounts custom ADA frames, Datapath low-latency video wall processors/KVM, and Evans ergonomic command consoles. This approach reduces deal friction and delivers turnkey C2 solutions to enterprise customers."
+      },
+      {
+        triggers: ['formula', 'distance', 'acuity', 'pitch', 'retina', '8x', '10x', 'math', 'rule'],
+        title: "dvLED Viewing Acuity Rules & Mathematical Modeling",
+        response: "Michael uses strict optical physics: The Minimum Viewing Distance formula is Pixel Pitch (mm) × 8. At this threshold, human visual acuity (1 arcminute) blends pixels into continuous tone. For optimal 20/20 retina comfort, he specifies Pitch (mm) × 10. Specifying a finer pitch than 8x wastes customer budget; exceeding the threshold results in visible diode grid lines."
+      },
+      {
+        triggers: ['salesforce', 'pipeline', 'cadence', 'velocity', 'sla', 'deal', 'deals'],
+        title: "Salesforce Discipline & Sales Engineering Velocity",
+        response: "Michael operates sales engineering with enterprise CRM discipline. In Salesforce, this includes structured Stage progression tracking, rapid turn-around on technical drawings and RFPs within 24-48 hours, accurate Bill of Materials (BOM) creation, and proactive coordination with regional sales managers to accelerate deal velocity."
+      },
+      {
+        triggers: ['career', 'lennar', 'avi-spl', 'nta', 'history', 'progression', 'flight'],
+        title: "Career Flight Path: Frontline Integration to Global OEM",
+        response: "Michael's career spans 15+ years across the commercial AV stack: He began hands-on with systems integrators AVI-SPL and National Technology Associates (NTA) commissioning complex hospitality and resort systems, served as Senior AV Specialist for Fortune 500 homebuilder Lennar Corporation modernizing enterprise facilities, and now serves as Senior B2B Solution Sales Engineer & Strategic Alliances Lead at LG Electronics USA."
+      },
+      {
+        triggers: ['enablement', 'training', 'academy', 'insight', 'curriculum'],
+        title: "Seller Enablement & 'Solutioning with Insight'",
+        response: "Michael translates complex display engineering into revenue-generating sales collateral. He authored the 'Solutioning with Insight' training series and leads technical workshops for the LG Academy and InfoComm, empowering channel reps to sell business outcomes rather than spec sheets."
+      },
+      {
+        triggers: ['alfa', 'car', 'sincity', 'vp', 'community', 'aroc', 'nevalfa'],
+        title: "Executive Community Leadership & Automotive Heritage",
+        response: "Michael serves as Vice President of AROC NEVALFA and is the Founder of SinCity Alfas. He applies executive leadership, event production, and sponsorship acquisition to build vibrant regional automotive heritage communities in Las Vegas and the southwest."
+      }
+    ];
+
+    function handleUserInput(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const query = input.value.trim();
+      if (!query) return;
+
+      playCyberBip(800, 0.05);
+      appendUserMessage(query);
+      input.value = '';
+
+      setTimeout(() => {
+        respondToQuery(query);
+      }, 350);
+    }
+
+    function sendQuickPrompt(promptText) {
+      playCyberBip(850, 0.04);
+      document.getElementById('chatInput').value = promptText;
+      handleUserInput(null);
+    }
+
+    function appendUserMessage(text) {
+      const chat = document.getElementById('chatHistory');
+      const div = document.createElement('div');
+      div.className = "flex items-start justify-end gap-3";
+      div.innerHTML = `
+        <div class="space-y-1 text-right max-w-xl">
+          <div class="text-[11px] text-slate-400 font-mono">OPERATOR // INQUIRY</div>
+          <div class="text-cyan-200 bg-cyan-950/40 p-3 rounded-lg border border-cyan-800/60 inline-block text-left font-mono">
+            ${escapeHtml(text)}
+          </div>
+        </div>
+        <div class="w-8 h-8 rounded bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 font-bold shrink-0">
+          <i class="fa-solid fa-user text-xs"></i>
+        </div>
+      `;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function respondToQuery(query) {
+      const lower = query.toLowerCase();
+      let match = null;
+
+      for (const item of dossierKnowledge) {
+        if (item.triggers.some(t => lower.includes(t))) {
+          match = item;
+          break;
+        }
+      }
+
+      const chat = document.getElementById('chatHistory');
+      const div = document.createElement('div');
+      div.className = "flex items-start gap-3";
+
+      let responseText = "";
+      let header = "MICHAEL_AI // STRATEGIC RESPONSE";
+
+      if (match) {
+        header = `MICHAEL_AI // ${match.title.toUpperCase()}`;
+        responseText = match.response;
+      } else {
+        responseText = `I have logged your inquiry on "${escapeHtml(query)}". Michael's domain covers enterprise commercial AV, dvLED specification modeling (MicroLED to large pitch), multi-vendor alliance marketing (LG, Premier Mounts, Datapath, Evans), and Salesforce sales engineering cadence. Inquire about his viewing distance formulas, the Alliance Fusion Center in Brea, CA, or his background from Lennar to LG.`;
+      }
+
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-bold shrink-0">
+          AI
+        </div>
+        <div class="space-y-1 max-w-2xl font-mono">
+          <div class="text-[11px] text-cyan-400 font-semibold tracking-wider">${header}</div>
+          <div class="text-slate-300 bg-slate-900/80 p-3.5 rounded-lg border border-slate-800 leading-relaxed">
+            ${responseText}
+          </div>
+        </div>
+      `;
+
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      playCyberBip(1100, 0.06);
+    }
+
+    function escapeHtml(str) {
+      const p = document.createElement('p');
+      p.appendChild(document.createTextNode(str));
+      return p.innerHTML;
+    }
+
+    // 3. dvLED Acuity Telemetry Calculator
+    function updateDvLEDCalc() {
+      const pitch = parseFloat(document.getElementById('pitchRange').value);
+      const distance = parseInt(document.getElementById('distRange').value);
+
+      document.getElementById('pitchDisplay').innerText = `${pitch.toFixed(2)} mm`;
+      document.getElementById('distDisplay').innerText = `${distance} Feet`;
+
+      // 8x threshold for minimum blended visual acuity
+      const minAcuityFeet = (pitch * 8).toFixed(1);
+      // 10x threshold for comfortable retina acuity
+      const optAcuityFeet = (pitch * 10).toFixed(1);
+
+      document.getElementById('minAcuityVal').innerText = `${minAcuityFeet} ft`;
+      document.getElementById('optAcuityVal').innerText = `${optAcuityFeet} ft`;
+      document.getElementById('beamDistanceSpan').innerText = `${distance} FT THROW`;
+      document.getElementById('wallPitchLabel').innerText = `P${pitch.toFixed(2)}`;
+
+      const badge = document.getElementById('verdictBadge');
+      const tag = document.getElementById('resolutionClassTag');
+
+      if (distance < minAcuityFeet) {
+        badge.className = "text-center px-3 py-1.5 rounded bg-rose-950/70 border border-rose-500/40 text-rose-300 font-mono text-xs";
+        badge.innerText = "Pixelation Risk: Viewer is too close. Recommend tighter pitch (e.g., P0.9 / MicroLED).";
+        tag.className = "text-rose-400 font-bold";
+        tag.innerText = "RESOLUTION CONFLICT // EXCESSIVE PROXIMITY";
+      } else if (distance >= minAcuityFeet && distance <= optAcuityFeet * 1.6) {
+        badge.className = "text-center px-3 py-1.5 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 font-mono text-xs";
+        badge.innerText = "Specification Optimized: Retina blend achieved. Seamless canvas.";
+        tag.className = "text-emerald-400 font-bold";
+        tag.innerText = "UHD / NATIVE PIXEL MAPPING READY";
+      } else {
+        badge.className = "text-center px-3 py-1.5 rounded bg-amber-950/70 border border-amber-500/40 text-amber-300 font-mono text-xs";
+        badge.innerText = "Budget Opportunity: Safe acuity. Opportunity to save client budget with higher pitch.";
+        tag.className = "text-amber-400 font-bold";
+        tag.innerText = "OVER-SPECIFIED // COMFORT THRESHOLD EXCEEDED";
+      }
+    }
+
+    // 4. Utility Smooth Nav
+    function scrollToSection(id) {
+      playCyberBip(650, 0.04);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToTop() {
+      playCyberBip(900, 0.04);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function downloadBriefing() {
+      playCyberBip(1100, 0.06);
+      window.print();
+    }
+
+    // Initialize calculator on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateDvLEDCalc();
+    });
+  </script>
+</body>
+</html>
